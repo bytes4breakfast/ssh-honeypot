@@ -49,8 +49,11 @@ def listener():
 
     server = Server(ip = str(addr[0]))
     t.start_server(server=server)
-
-
+    
+    # 5 second timeout for each channel
+    server.event.wait(5)
+    t.close()
+    
 while True:
 
     try:
