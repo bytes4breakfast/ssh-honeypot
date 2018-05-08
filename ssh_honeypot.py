@@ -38,26 +38,22 @@ class Server(paramiko.ServerInterface):
     def get_allowed_auths(self, username):
         return 'password'
         
-def listener():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(('', PORT))
-    sock.listen(100)
-    client, addr = sock.accept()
-
-    t = paramiko.Transport(client)
-    t.add_server_key(host_key)
-
-    server = Server(ip = str(addr[0]))
-    t.start_server(server=server)
-    
-    # 5 second timeout for each channel
-    server.event.wait(5)
-    t.close()
-    
+#Setup server to listen on designed port.
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+sock.bind(('', PORT))
+sock.listen(100)
 while True:
 
     try:
-        listener()
+        client, addr = sock.accept()
+        t = paramiko.Transport(client)
+        t.add_server_key(host_key)
+        server = Server(ip = str(addr[0]))
+        t.start_server(server=server)
+        # 5 second timeout for each client socket
+        server.event.wait(5)
+        client.close()
     except KeyboardInterrupt:
         sys.exit(0)
     except Exception as exc:
