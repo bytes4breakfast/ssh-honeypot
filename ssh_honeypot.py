@@ -40,6 +40,7 @@ class Server(paramiko.ServerInterface):
         
 #Setup server to listen on designed port.
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 sock.bind(('', PORT))
 sock.listen(100)
 while True:
@@ -52,8 +53,9 @@ while True:
         t.start_server(server=server)
         # 5 second timeout for each client socket
         server.event.wait(5)
-        client.close()
+        t.close()
     except KeyboardInterrupt:
         sys.exit(0)
     except Exception as exc:
         logger.error(exc)
+        t.close()
