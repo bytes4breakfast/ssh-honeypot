@@ -13,5 +13,5 @@ I built this program in order to be able to produce wordlists of usernames and p
 Change your real SSH server to a non-standard port, and run this program on port 22 to start logging bruteforce attempts. You will need to generate new host keys using *ssh-keygen*.\
 Obtaining access to a machine through this server shouldn't be possible as it always rejects all credentials without even bothering to look them up in the system. Nevertheless, you should NEVER interact with it using your real credentials, as they will be stored in plaintext in a file.
 
-## **Known Bugs**
-*[1] The program leaks sockets when receiving a large ammount of connections in a small time window and eventually (hours) freezes and stops accepting new connections. As a workaround, it is possible to kill and restart the program every day or so.
+### **Known Bugs**
+* [1] The program leaks sockets when receiving a large ammount of connections in a small time window and eventually (hours) freezes and stops accepting new connections. As a workaround, it is possible to kill and restart the program every day or so.
